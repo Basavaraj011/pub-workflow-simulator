@@ -41,6 +41,6 @@ jobs:
 
           aws lambda invoke \
             --function-name post-pr-actions-trigger \
-            --payload $(echo $PAYLOAD | base64 -w 0) \
+            --payload "$PAYLOAD \
             --cli-binary-format raw-in-base64-out \
             response.json
