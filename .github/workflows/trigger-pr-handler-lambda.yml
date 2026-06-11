@@ -4,7 +4,7 @@ on:
     types: [opened, closed]   # capture both open and close events
 
 jobs:
-  handle-pr:
+  trigger-pr-handler-lambda:
     runs-on: ubuntu-latest
     steps:
       - name: Send PR Event to Lambda
