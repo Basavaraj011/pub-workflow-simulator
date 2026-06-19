@@ -4,7 +4,7 @@ This repository simulates failures in a PUB workflow system.
 
 ## Observed Errors
 
-1. Unexpected state returned by advertiser request to upload file segment
+1. Unexpected state returned by advertiser request to upload file segment 
 2. RetriableActivityException: Unable to upload file from S3
 
 ## Known Issues
