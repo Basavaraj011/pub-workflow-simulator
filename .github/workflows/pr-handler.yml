@@ -1,32 +1,49 @@
-# .github/workflows/pr-handler.yml
+name: PR Handler
+
 on:
   pull_request:
-    types: [opened, closed]   # capture both open and close events
+    types: [opened, closed]
 
 jobs:
   handle-pr:
     runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write 
+      contents: read
+
     steps:
+      # Checkout repo (optional but good practice)
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Authenticate to AWS using OIDC
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::874456856173:role/github-actions-ecr-role
+          aws-region: us-east-1
+
+      # Build and send payload to Lambda
       - name: Send PR Event to Lambda
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
         run: |
+          set -e
+
           PAYLOAD=$(jq -n \
-            --arg event_action "${{ github.event.action }}" \
             --arg tenant_id "tenant_a" \
+            --arg event_action "${{ github.event.action }}" \
             --arg pr_number "${{ github.event.pull_request.number }}" \
             --arg pr_title "${{ github.event.pull_request.title }}" \
             --arg author "${{ github.event.pull_request.user.login }}" \
             --arg source_branch "${{ github.head_ref }}" \
             --arg target_branch "${{ github.base_ref }}" \
             --arg commit_sha "${{ github.event.pull_request.head.sha }}" \
-            --arg merged "${{ github.event.pull_request.merged }}" \
-            --arg merged_by "${{ github.event.pull_request.merged_by.login }}" \
+            --argjson merged ${{ github.event.pull_request.merged }} \
+            --arg merged_by "${{ github.event.pull_request.merged_by && github.event.pull_request.merged_by.login || '' }}" \
             --arg repo "${{ github.repository }}" \
             --arg platform "github" \
             '{
+              tenant_id: $tenant_id,
               event_action: $event_action,
               platform: $platform,
               pr_number: $pr_number,
@@ -40,8 +57,16 @@ jobs:
               repo: $repo
             }')
 
+          echo "================ PAYLOAD ================"
+          echo "$PAYLOAD"
+          echo "========================================="
+
           aws lambda invoke \
             --function-name post-pr-actions-trigger \
             --payload "$PAYLOAD" \
             --cli-binary-format raw-in-base64-out \
             response.json
+
+          echo "================ RESPONSE ================"
+          cat response.json
+          echo "=========================================="
