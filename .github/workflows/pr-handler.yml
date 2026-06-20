@@ -32,6 +32,7 @@ jobs:
           PAYLOAD=$(jq -n \
             --arg tenant_id "tenant_a" \
             --arg event_action "${{ github.event.action }}" \
+            --arg pr_id "${{ github.event.pull_request.id }}" \
             --arg pr_number "${{ github.event.pull_request.number }}" \
             --arg pr_title "${{ github.event.pull_request.title }}" \
             --arg author "${{ github.event.pull_request.user.login }}" \
@@ -46,6 +47,7 @@ jobs:
               tenant_id: $tenant_id,
               event_action: $event_action,
               platform: $platform,
+              pr_id:$pr_id
               pr_number: $pr_number,
               pr_title: $pr_title,
               author: $author,
