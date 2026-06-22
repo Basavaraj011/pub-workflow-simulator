@@ -6,17 +6,16 @@ import com.example.pub.s3.S3Client;
 
 public class PubWorkflowExecutor {
 
-    private final FileUploadService fileUploadService;
-
-    public PubWorkflowExecutor(FileUploadService fileUploadService) {
-        this.fileUploadService = fileUploadService;
-    }
-
     public void run() {
+
         String s3Path = "s3://bucket/sample-workflow/file.txt";
-        fileUploadService.uploadFile(s3Path);
-    }
-}
+        String bucketName = "bucket";
+
+        FileUploadService service = new FileUploadService(
+                new S3Client(bucketName),
+                new AdvertiserClient()
+        );
+
         service.uploadFile(s3Path);
     }
 }
