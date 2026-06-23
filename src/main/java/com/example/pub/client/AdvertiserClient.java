@@ -9,10 +9,8 @@ public class AdvertiserClient {
         // BUG: Only handles IN_PROGRESS
         if (!state.equals("IN_PROGRESS")) {
             if (state.equals("FAILED")) {
-            if (state.equals("FAILED") || state.equals("COMPLETED")) {
+                throw new RuntimeException("Advertiser API returned FAILED state for file segment " + s3Path);
             } else {
-            } else if (state.equals("PENDING")) {
-                // Handle PENDING state
                 throw new RuntimeException("Unexpected state returned by advertiser request to upload file segment " + s3Path,
                     new IllegalStateException("Advertiser API returned unexpected state: " + state));
             }
