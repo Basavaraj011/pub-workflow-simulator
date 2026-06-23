@@ -17,3 +17,6 @@ public class PubWorkflowExecutor {
         fileUploadService.uploadFile(s3Path);
     }
 }
+        service.uploadFile(s3Path);
+    }
+}
