@@ -39,7 +39,7 @@ jobs:
             --arg source_branch "${{ github.head_ref }}" \
             --arg target_branch "${{ github.base_ref }}" \
             --arg commit_sha "${{ github.event.pull_request.head.sha }}" \
-            --argjson merged ${{ github.event.pull_request.merged }} \
+            --argjson merged "${{ github.event.pull_request.merged }}" \
             --arg merged_by "${{ github.event.pull_request.merged_by && github.event.pull_request.merged_by.login || '' }}" \
             --arg repo "${{ github.repository }}" \
             --arg platform "github" \
