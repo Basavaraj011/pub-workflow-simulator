@@ -14,8 +14,6 @@ public class PubWorkflowExecutor {
 
     public void run() {
         String s3Path = "s3://bucket/sample-workflow/file.txt";
-        this.fileUploadService.uploadFile(s3Path);
-}
         service.uploadFile(s3Path);
     }
 }
