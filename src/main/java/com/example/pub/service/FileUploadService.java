@@ -20,9 +20,8 @@ public class FileUploadService {
             byte[] data = s3Client.read(s3Path);
             advertiserClient.uploadSegment(s3Path, data);
         } catch (RetriableActivityException e) {
-            throw e;
-
             int retryCount = 3;
+
             for (int i = 0; i < retryCount; i++) {
                 try {
                     byte[] data = s3Client.read(s3Path);
@@ -33,7 +32,6 @@ public class FileUploadService {
                 }
             }
             throw new RetriableActivityException("Unable to upload file from '" + s3Path + "'", e);
-            );
         }
     }
 }
