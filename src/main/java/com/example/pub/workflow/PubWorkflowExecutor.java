@@ -10,10 +10,11 @@ public class PubWorkflowExecutor {
 
     public PubWorkflowExecutor(FileUploadService fileUploadService) {
         this.fileUploadService = fileUploadService;
+        this.s3Client = s3Client;
     }
 
     public void run() {
         String s3Path = "s3://bucket/sample-workflow/file.txt";
-        service.uploadFile(s3Path);
+        fileUploadService.uploadFile(s3Path);
     }
 }
