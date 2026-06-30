@@ -10,7 +10,7 @@ public class PubWorkflowExecutor {
 
     public PubWorkflowExecutor(FileUploadService fileUploadService) {
         this.fileUploadService = fileUploadService;
-        this.s3Client = s3Client;
+        this.s3Client = new S3Client();
     }
 
     public void run() {
