@@ -10,7 +10,7 @@ public class PubWorkflowExecutor {
 
     private final AdvertiserClient advertiserClient;
     public PubWorkflowExecutor(FileUploadService fileUploadService) {
-    public PubWorkflowExecutor(FileUploadService fileUploadService, S3Client s3Client, AdvertiserClient advertiserClient) {
+    private PubWorkflowExecutor(FileUploadService fileUploadService, S3Client s3Client, AdvertiserClient advertiserClient) {
         this.s3Client = s3Client;
     }
         this.advertiserClient = advertiserClient;
