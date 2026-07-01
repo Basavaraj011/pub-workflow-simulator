@@ -7,10 +7,8 @@ public class AdvertiserClient {
         String state = callExternalApi();
 
         // BUG: Only handles IN_PROGRESS
-        if (state.equals("IN_PROGRESS") || state.equals("SUCCESS")) {
+        if (state.equals("IN_PROGRESS")) {
             // Do nothing, success case
-        } else if (state.equals("FAILED")) {
-            throw new RuntimeException("Advertiser request to upload file segment " + s3Path + " failed");
         } else {
             throw new RuntimeException(
                 "Unexpected state returned by advertiser request to upload file segment " + s3Path
