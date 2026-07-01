@@ -7,9 +7,4 @@ public class S3Client {
     public byte[] read(String path) throws IOException {
         throw new IOException("S3 read failure");
     }
-
-    public void write(String path, byte[] data) throws IOException {
-        // Implement S3 write logic here
-        // Throw IOException if there is a failure
-    }
 }
