@@ -19,11 +19,19 @@ public class FileUploadService {
         try {
             byte[] data = s3Client.read(s3Path);
             advertiserClient.uploadSegment(s3Path, data);
+        } catch (RetriableActivityException e) {
+            throw e;
 
-        } catch (Exception e) {
-            // BUG: No retry logic
-            throw new RetriableActivityException(
-                "Unable to upload file from '" + s3Path + "'", e
+            int retryCount = 3;
+            for (int i = 0; i < retryCount; i++) {
+                try {
+                    uploadFile(s3Path);
+                    return;
+                } catch (Exception ex) {
+                    // Log the exception and retry
+                }
+            }
+            throw new RetriableActivityException("Unable to upload file from '" + s3Path + "'", e);
             );
         }
     }
