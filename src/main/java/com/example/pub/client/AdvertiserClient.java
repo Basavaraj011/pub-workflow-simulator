@@ -11,7 +11,8 @@ public class AdvertiserClient {
             // Do nothing, continue processing
         } else {
             throw new RuntimeException(
-                "Unexpected state returned by advertiser request to upload file segment " + s3Path
+                "Unexpected state returned by advertiser request to upload file segment " + s3Path,
+                new IllegalStateException("Advertiser API returned unexpected state: " + state)
             );
         }
     }
