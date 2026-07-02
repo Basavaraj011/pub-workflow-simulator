@@ -16,7 +16,7 @@ public class AdvertiserClient {
         }
     }
 
-    private String callExternalApi() {
+    public String callExternalApi() {
         return "FAILED";
     }
 }
