@@ -18,15 +18,10 @@ public class FileUploadService {
 
         try {
             byte[] data = s3Client.read(s3Path);
-            try {
-                advertiserClient.uploadSegment(s3Path, data);
-            } catch (Exception e) {
-                throw new RetriableActivityException(
-                    "Unable to upload file from '" + s3Path + "'", e
-                );
-            }
+            advertiserClient.uploadSegment(s3Path, data);
 
         } catch (Exception e) {
+            // BUG: No retry logic
             throw new RetriableActivityException(
                 "Unable to upload file from '" + s3Path + "'", e
             );
