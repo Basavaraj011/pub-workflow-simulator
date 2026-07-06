@@ -15,16 +15,32 @@ public class FileUploadService {
     }
 
     public void uploadFile(String s3Path) {
-
-        try {
-            byte[] data = s3Client.read(s3Path);
-            advertiserClient.uploadSegment(s3Path, data);
-
-        } catch (Exception e) {
-            // BUG: No retry logic
-            throw new RetriableActivityException(
-                "Unable to upload file from '" + s3Path + "'", e
-            );
+        int maxRetries = 3;
+        int attempt = 0;
+        Exception lastException = null;
+        while (attempt < maxRetries) {
+            try {
+                byte[] data = s3Client.read(s3Path);
+                advertiserClient.uploadSegment(s3Path, data);
+                return;
+            } catch (Exception e) {
+                lastException = e;
+                attempt++;
+                if (attempt < maxRetries) {
+                    try {
+                        Thread.sleep(1000 * attempt); // Exponential backoff
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        throw new RetriableActivityException(
+                            "Upload interrupted for file '" + s3Path + "'", ie
+                        );
+                    }
+                }
+            }
         }
+        throw new RetriableActivityException(
+            "Unable to upload file from '" + s3Path + "' after " + maxRetries + " attempts",
+            lastException
+        );
     }
 }
