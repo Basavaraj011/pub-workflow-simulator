@@ -5,6 +5,8 @@ import java.io.IOException;
 public class S3Client {
 
     public byte[] read(String path) throws IOException {
+        // Implement S3 read logic here
+        // Throw IOException if there is a failure
         throw new IOException("S3 read failure");
     }
 
