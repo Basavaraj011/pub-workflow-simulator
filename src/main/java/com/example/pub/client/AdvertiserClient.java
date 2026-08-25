@@ -7,7 +7,7 @@ public class AdvertiserClient {
         String state = callExternalApi();
 
         // Accept any state for now to avoid failing on unexpected API responses
-        if (!state.equals("IN_PROGRESS") && !state.equals("Did Not Pass This Time , Retry Again")) {
+        if (!state.equals("IN_PROGRESS") ) {
             throw new RuntimeException(
                 "Unexpected state returned by advertiser request to upload file segment " + s3Path,
                 new IllegalStateException("Advertiser API returned unexpected state: " + state)
